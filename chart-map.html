@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>India UPI — State-Level Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f2ed;--card:#fff;--bdr:#e8e3db;
+  --dark:#1c2533;--mid:#4a5568;--lite:#8a9bb0;
+}
+body{background:var(--bg);color:var(--dark);
+  font-family:'DM Mono',monospace;font-size:13px;padding:0}
+
+.sec-eye{font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--lite);margin-bottom:5px}
+.sec-ttl{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px}
+.sec-desc{font-size:11px;color:var(--mid);line-height:1.85;margin-bottom:18px}
+
+.map-wrap{border-radius:14px;overflow:hidden;
+  background:var(--card);border:1px solid var(--bdr);
+  display:flex;flex-direction:column}
+#map-msg{display:flex;flex-direction:column;align-items:center;
+  justify-content:center;min-height:600px;font-size:11px;
+  color:var(--lite);text-align:center;padding:24px}
+#choropleth{width:100%}
+</style>
+</head>
+<body>
+
+<div class="sec-eye">Geographic View</div>
+<div class="sec-ttl">Where Is India Actually Using UPI?</div>
+<div class="sec-desc">
+  UPI transactions per person per month, averaged over Feb 2025 – Jan 2026. Darker = more digitised per capita. Hover over any state for detailed numbers.
+</div>
+
+<div class="map-wrap">
+  <div id="map-msg">
+    Loading India map…<br>
+    <span style="font-size:10px;margin-top:8px;opacity:.6">Requires internet connection</span>
+  </div>
+  <div id="choropleth" style="height:650px"></div>
+</div>
+
+<script>
+const MAP_DATA = [{"state":"DELHI","state_title":"Delhi","txns_per_capita":22.5,"rank":1,"growth_type":"Steady Growth"},{"state":"GOA","state_title":"Goa","txns_per_capita":21.4,"rank":2,"growth_type":"Accelerating"},{"state":"CHANDIGARH","state_title":"Chandigarh","txns_per_capita":20.6,"rank":3,"growth_type":"Steady Growth"},{"state":"TELANGANA","state_title":"Telangana","txns_per_capita":20.5,"rank":4,"growth_type":"Steady Growth"},{"state":"MAHARASHTRA","state_title":"Maharashtra","txns_per_capita":15.6,"rank":5,"growth_type":"Plateauing"},{"state":"KARNATAKA","state_title":"Karnataka","txns_per_capita":15.2,"rank":6,"growth_type":"Steady Growth"},{"state":"HARYANA","state_title":"Haryana","txns_per_capita":12.3,"rank":7,"growth_type":"Accelerating"},{"state":"LADAKH","state_title":"Ladakh","txns_per_capita":12.0,"rank":8,"growth_type":"Accelerating"},{"state":"SIKKIM","state_title":"Sikkim","txns_per_capita":11.6,"rank":9,"growth_type":"Accelerating"},{"state":"KERALA","state_title":"Kerala","txns_per_capita":11.0,"rank":10,"growth_type":"Accelerating"},{"state":"ARUNACHAL PRADESH","state_title":"Arunachal Pradesh","txns_per_capita":10.8,"rank":11,"growth_type":"Accelerating"},{"state":"PUDUCHERRY","state_title":"Puducherry","txns_per_capita":10.6,"rank":12,"growth_type":"Accelerating"},{"state":"ANDHRA PRADESH","state_title":"Andhra Pradesh","txns_per_capita":10.0,"rank":13,"growth_type":"Accelerating"},{"state":"ANDAMAN & NICOBAR","state_title":"Andaman & Nicobar","txns_per_capita":9.4,"rank":14,"growth_type":"Accelerating"},{"state":"TAMIL NADU","state_title":"Tamil Nadu","txns_per_capita":9.0,"rank":15,"growth_type":"Accelerating"},{"state":"UTTARAKHAND","state_title":"Uttarakhand","txns_per_capita":9.0,"rank":15,"growth_type":"Accelerating"},{"state":"MIZORAM","state_title":"Mizoram","txns_per_capita":8.1,"rank":17,"growth_type":"Accelerating"},{"state":"HIMACHAL PRADESH","state_title":"Himachal Pradesh","txns_per_capita":7.3,"rank":18,"growth_type":"Accelerating"},{"state":"GUJARAT","state_title":"Gujarat","txns_per_capita":6.7,"rank":19,"growth_type":"Accelerating"},{"state":"PUNJAB","state_title":"Punjab","txns_per_capita":6.4,"rank":20,"growth_type":"Accelerating"},{"state":"RAJASTHAN","state_title":"Rajasthan","txns_per_capita":6.3,"rank":21,"growth_type":"Steady Growth"},{"state":"NAGALAND","state_title":"Nagaland","txns_per_capita":5.9,"rank":22,"growth_type":"Accelerating"},{"state":"ODISHA","state_title":"Odisha","txns_per_capita":5.9,"rank":22,"growth_type":"Steady Growth"},{"state":"ASSAM","state_title":"Assam","txns_per_capita":5.4,"rank":24,"growth_type":"Accelerating"},{"state":"MADHYA PRADESH","state_title":"Madhya Pradesh","txns_per_capita":5.0,"rank":25,"growth_type":"Declining"},{"state":"JAMMU AND KASHMIR","state_title":"Jammu And Kashmir","txns_per_capita":5.0,"rank":25,"growth_type":"Accelerating"},{"state":"UTTAR PRADESH","state_title":"Uttar Pradesh","txns_per_capita":4.3,"rank":27,"growth_type":"Accelerating"},{"state":"MANIPUR","state_title":"Manipur","txns_per_capita":4.2,"rank":29,"growth_type":"Accelerating"},{"state":"JHARKHAND","state_title":"Jharkhand","txns_per_capita":4.2,"rank":29,"growth_type":"Accelerating"},{"state":"WEST BENGAL","state_title":"West Bengal","txns_per_capita":4.2,"rank":29,"growth_type":"Accelerating"},{"state":"CHHATTISGARH","state_title":"Chhattisgarh","txns_per_capita":4.1,"rank":31,"growth_type":"Accelerating"},{"state":"MEGHALAYA","state_title":"Meghalaya","txns_per_capita":3.7,"rank":32,"growth_type":"Accelerating"},{"state":"TRIPURA","state_title":"Tripura","txns_per_capita":3.3,"rank":33,"growth_type":"Accelerating"},{"state":"BIHAR","state_title":"Bihar","txns_per_capita":3.2,"rank":34,"growth_type":"Accelerating"}];
+
+const NAME_MAP = {'ANDAMAN & NICOBAR':'Andaman & Nicobar Island','ANDHRA PRADESH':'Andhra Pradesh','ARUNACHAL PRADESH':'Arunanchal Pradesh','ASSAM':'Assam','BIHAR':'Bihar','CHANDIGARH':'Chandigarh','CHHATTISGARH':'Chhattisgarh','DELHI':'NCT of Delhi','GOA':'Goa','GUJARAT':'Gujarat','HARYANA':'Haryana','HIMACHAL PRADESH':'Himachal Pradesh','JAMMU AND KASHMIR':'Jammu & Kashmir','JHARKHAND':'Jharkhand','KARNATAKA':'Karnataka','KERALA':'Kerala','LADAKH':'Ladakh','LAKSHADWEEP':'Lakshadweep','MADHYA PRADESH':'Madhya Pradesh','MAHARASHTRA':'Maharashtra','MANIPUR':'Manipur','MEGHALAYA':'Meghalaya','MIZORAM':'Mizoram','NAGALAND':'Nagaland','ODISHA':'Odisha','PUDUCHERRY':'Puducherry','PUNJAB':'Punjab','RAJASTHAN':'Rajasthan','SIKKIM':'Sikkim','TAMIL NADU':'Tamil Nadu','TELANGANA':'Telangana','TRIPURA':'Tripura','UTTAR PRADESH':'Uttar Pradesh','UTTARAKHAND':'Uttarakhand','WEST BENGAL':'West Bengal'};
+
+const GEO_LOOKUP = {};
+MAP_DATA.forEach(d => { const gn = NAME_MAP[d.state]; if (gn) GEO_LOOKUP[gn] = d; });
+
+async function loadMap() {
+  try {
+    const res = await fetch('https://gist.githubusercontent.com/jbrobst/56c13bbbf9d97d187fea01ca62ea5112/raw/e388c4cae20aa53cb5090210a42ebb9b765c0a36/india_states.geojson');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const geoJson = await res.json();
+    const nameKey = geoJson.features[0].properties.ST_NM !== undefined ? 'ST_NM' : 'NAME_1';
+    document.getElementById('map-msg').style.display = 'none';
+    const locs=[], zs=[], txts=[], cdata=[];
+    geoJson.features.forEach(f => {
+      const gn = f.properties[nameKey];
+      const d  = GEO_LOOKUP[gn];
+      locs.push(gn);
+      zs.push(d ? +d.txns_per_capita : null);
+      txts.push(d ? d.state_title : gn);
+      cdata.push([d ? d.state_title:'N/A', d ? d.txns_per_capita:'N/A', d ? d.rank:'N/A', d ? d.growth_type:'N/A']);
+    });
+    const valid = zs.filter(v => v !== null);
+    Plotly.newPlot('choropleth', [{
+      type:'choropleth', geojson:geoJson,
+      featureidkey:'properties.' + nameKey,
+      locations:locs, z:zs,
+      zmin:Math.min(...valid), zmax:Math.max(...valid),
+      colorscale:[[0,'#f0f9ff'],[0.2,'#bae6fd'],[0.5,'#38bdf8'],[0.8,'#0369a1'],[1.0,'#0c2d5e']],
+      text:txts, customdata:cdata,
+      hovertemplate:'<b>%{customdata[0]}</b><br>UPI txns per person per month: <b>%{customdata[1]}</b><br>Rank: #%{customdata[2]} of 34<br>Growth status: %{customdata[3]}<extra></extra>',
+      marker:{line:{color:'#ffffff',width:0.8}},
+      colorbar:{title:{text:'Txns / person / month',font:{size:10,color:'#8a9bb0',family:'DM Mono,monospace'}},tickfont:{size:9,color:'#8a9bb0',family:'DM Mono,monospace'},thickness:10,len:0.65,bgcolor:'rgba(0,0,0,0)'},
+    }], {
+      geo:{scope:'asia',resolution:50,center:{lat:22,lon:80},projection:{type:'mercator',scale:1.2},showland:true,landcolor:'#f0ece6',showocean:true,oceancolor:'#e8f4f8',showlakes:false,showcountries:true,countrycolor:'#d0ccc6',showcoastlines:true,coastlinecolor:'#d0ccc6',bgcolor:'rgba(0,0,0,0)',lataxis:{range:[6,38]},lonaxis:{range:[66,100]}},
+      paper_bgcolor:'rgba(0,0,0,0)',margin:{l:0,r:0,t:0,b:0},height:650,
+      hoverlabel:{bgcolor:'#1c2533',bordercolor:'#1d6fa4',font:{family:'DM Mono,monospace',color:'#fff',size:11}},
+    }, {responsive:true, displayModeBar:false});
+  } catch(e) {
+    document.getElementById('map-msg').innerHTML = '<b style="color:#c8401a">Map unavailable</b><br>Requires internet connection.<br><span style="font-size:10px;margin-top:8px;opacity:.6">See ranking chart for same data.</span>';
+  }
+}
+loadMap();
+</script>
+</body>
+</html>
