@@ -2,7 +2,7 @@
 
 33 months of NPCI transaction data (May 2023 – Jan 2026) combined with MOSPI GDP data and Census 2011 population projections, analysed at the state level across all 34 states.
 
-**[→ View interactive dashboard](https://yourusername.github.io/upi-digitisation-india/upi_dashboard_final.html)**
+**[→ View interactive dashboard](https://yourusername.github.io/upi-digitisation-india/upi_dashboard.html)**
 
 ## Key findings
 
