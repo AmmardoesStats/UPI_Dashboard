@@ -25,7 +25,7 @@ upi-digitisation-india/
 ├── upi_dashboard.html # Pre-built dashboard (ready to deploy)
 │
 ├── notebooks/
-│   └── Statewise_UPI.ipynb       # Full analysis pipeline: clean → GSDP → intensity → charts
+│   └── Statewise_UPI.ipynb       # Full analysis pipeline
 │
 └── data/                    # Not tracked in git (see Data section below)
     ├── npci_statewise_master.csv
