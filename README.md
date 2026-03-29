@@ -1,15 +1,15 @@
 # India UPI State-Level Digitisation Analysis
 
-33 months of NPCI transaction data (May 2023 – Jan 2026) combined with MOSPI GDP data and Census 2011 population projections, analysed at the state level across all 34 states.
+33 months of NPCI transaction data (May 2023 – Jan 2026), combined with MOSPI GDP data and Census 2011 population projections, were analysed at the state level across all 34 states.
 
-**[→ View interactive dashboard](https://ammardoesstats.github.io/UPI_Dashboard/upi_dashboard.html)**
+**[-> View interactive dashboard](https://ammardoesstats.github.io/UPI_Dashboard/upi_dashboard.html)**
 
 ## Key findings
 
-- A **7× per capita gap** separates Delhi (22.5 transactions/person/month) from Bihar (3.2) — a divide invisible in aggregate volume rankings
+- A **7× per capita gap** separates Delhi (22.5 transactions/person/month) from Bihar (3.2): a divide invisible in aggregate volume rankings
 - Average transaction sizes are **falling in every state**, a signature of mass-market adoption spreading into lower-income segments
-- The top 5 states' share of national UPI value fell **6.6 percentage points** over 33 months — but depth gaps between states are not narrowing
-- **Telangana** (134% UPI intensity) and **Ladakh** (119%) transact more through UPI than their GSDP per capita — the clearest outliers above the income-digitisation diagonal
+- The top 5 states' share of national UPI value fell **6.6 percentage points** over 33 months, but depth gaps between states are not narrowing
+- **Telangana** (134% UPI intensity) and **Ladakh** (119%) transact more through UPI than their GSDP per capita - the clearest outliers above the income-digitisation diagonal
 - **Gujarat** (44% intensity) is the most striking under-performer relative to its income level
 
 ## Repository structure
@@ -22,10 +22,10 @@ upi-digitisation-india/
 │
 ├── npci_scraper.py          # Scrapes raw NPCI Excel files (undetected-chromedriver)
 ├── generate_dashboard.py    # Builds the self-contained HTML dashboard from data
-├── upi_dashboard_final.html # Pre-built dashboard (ready to deploy)
+├── upi_dashboard.html # Pre-built dashboard (ready to deploy)
 │
 ├── notebooks/
-│   └── analysis.ipynb       # Full analysis pipeline: clean → GSDP → intensity → charts
+│   └── Statewise_UPI.ipynb       # Full analysis pipeline: clean → GSDP → intensity → charts
 │
 └── data/                    # Not tracked in git (see Data section below)
     ├── npci_statewise_master.csv
@@ -55,7 +55,7 @@ Downloads one Excel file per month into `npci_statewise_data/`. Requires Chrome.
 
 ### 3. Run the analysis notebook
 
-Open `notebooks/analysis.ipynb` and run all cells in order. You will also need to place the MOSPI GSDP Excel file at `data/MOSPI_Table21_GSDP.xlsx` — see Data Sources below.
+Open `notebooks/analysis.ipynb` and run all cells in order. You will also need to place the MOSPI GSDP Excel file at `data/MOSPI_Table21_GSDP.xlsx`; see Data Sources below.
 
 ### 4. Regenerate the dashboard
 
@@ -83,7 +83,7 @@ The `data/` directory is excluded from version control (see `.gitignore`). Raw N
 
 **UPI intensity** = annual UPI value per capita / GSDP per capita × 100. GSDP mapped to fiscal year: Apr–Mar. FY2025-26 GSDP extrapolated via state-specific 5-year CAGR (MOSPI data not yet published for that year).
 
-**Ticket size** = (Monthly Value Cr / Monthly Volume Mn) × 10 = Rs per transaction.
+**Ticket size** = (Monthly Value Cr / Monthly Volume Mn) x 10 = Rs per transaction.
 
 **Two important caveats:**
 1. NPCI records the sending bank account's registered state, not the location of the transaction. States with large migrant populations (UP, Bihar, Jharkhand) may be understated in local digitisation terms.
@@ -92,8 +92,8 @@ The `data/` directory is excluded from version control (see `.gitignore`). Raw N
 ## Dashboard deployment (GitHub Pages)
 
 1. Push this repository to GitHub
-2. Go to **Settings → Pages → Deploy from branch → main / root**
-3. Your dashboard will be live at `https://yourusername.github.io/upi-digitisation-india/upi_dashboard_final.html`
+2. Go to **Settings -> Pages -> Deploy from branch -> main / root**
+3. Your dashboard will be live at `https://yourusername.github.io/upi-digitisation-india/upi_dashboard.html`
 
 ## License
 
